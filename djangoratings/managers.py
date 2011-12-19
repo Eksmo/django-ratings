@@ -95,8 +95,8 @@ class SimilarUserManager(Manager):
         cursor.execute("""insert into %(t1)s
           (to_user_id, from_user_id, agrees, disagrees, exclude)
           select v1.user_id, v2.user_id,
-                 sum(if(v2.score = v1.score, 1, 0)) as agrees,
-                 sum(if(v2.score != v1.score, 1, 0)) as disagrees, 0
+                 sum(case v2.score when v1.score then 1 else 0) as agrees,
+                 sum(case v2.score when v1.score then 0 else 0) as disagrees, 0
             from %(t2)s as v1
               inner join %(t2)s as v2
                 on v1.user_id != v2.user_id
