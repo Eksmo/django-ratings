@@ -106,7 +106,7 @@ class SimilarUserManager(Manager):
               and v2.user_id is not null
             group by v1.user_id, v2.user_id
             having agrees / (disagrees + 0.0001) > 3
-          on duplicate key update agrees = values(agrees), disagrees = values(disagrees);""" % dict(
+          """ % dict(
             t1=self.model._meta.db_table,
             t2=Vote._meta.db_table,
         ))
