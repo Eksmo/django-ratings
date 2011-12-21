@@ -357,11 +357,11 @@ class RatingField(IntegerField):
 
         setattr(cls, name, field)
 
-    def get_db_prep_save(self, value):
+    def get_db_prep_save(self, value, connection):
         # XXX: what happens here?
         pass
 
-    def get_db_prep_lookup(self, lookup_type, value):
+    def get_db_prep_lookup(self, lookup_type, value, connection, prepared=False):
         # TODO: hack in support for __score and __votes
         # TODO: order_by on this field should use the weighted algorithm
         raise NotImplementedError(self.get_db_prep_lookup)
