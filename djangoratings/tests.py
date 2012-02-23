@@ -19,6 +19,9 @@ class RatingTestModel(models.Model):
     def __unicode__(self):
         return unicode(self.pk)
 
+    class Meta:
+        app_label = 'auth' #dirty workaround for south ticket#520
+
 class RatingTestCase(unittest.TestCase):
     def testRatings(self):
         instance = RatingTestModel.objects.create()
