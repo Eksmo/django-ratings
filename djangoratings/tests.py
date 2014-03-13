@@ -65,3 +65,5 @@ class RatingTestCase(unittest.TestCase):
         self.assertEquals(instance.rating2.score, 0)
         self.assertEquals(instance.rating2.votes, 0)
 
+        user.delete()
+        user2.delete()
