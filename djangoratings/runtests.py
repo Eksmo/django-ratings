@@ -7,7 +7,13 @@ from django.conf import settings
 
 if not settings.configured:
     settings.configure(
-        DATABASE_ENGINE='sqlite3',
+        DATABASES={
+            'default': {
+                'ENGINE': 'django.db.backends.postgresql_psycopg2',
+                'NAME': 'djangoratings_test',
+                'USER': 'postgres',
+            }
+        },
         INSTALLED_APPS=[
             'django.contrib.auth',
             'django.contrib.contenttypes',
@@ -15,15 +21,28 @@ if not settings.configured:
         ]
     )
 
-from django.test.simple import run_tests
+from django.test.runner import DiscoverRunner
 
 
-def runtests(*test_args):
+def runtests(*test_args, **kwargs):
+    if 'south' in settings.INSTALLED_APPS:
+        from south.management.commands import patch_for_test_db_setup
+        patch_for_test_db_setup()
+
     if not test_args:
         test_args = ['djangoratings']
-    parent = dirname(abspath(__file__))
-    sys.path.insert(0, parent)
-    failures = run_tests(test_args, verbosity=1, interactive=True)
+
+    import django
+    try:
+        django.setup()
+    except AttributeError:
+        pass
+
+    kwargs.setdefault('interactive', False)
+
+    test_runner = DiscoverRunner(**kwargs)
+
+    failures = test_runner.run_tests(test_args)
     sys.exit(failures)
 
 

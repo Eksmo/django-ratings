@@ -333,7 +333,7 @@ class RatingField(IntegerField):
         kwargs['default'] = 0
         kwargs['blank'] = True
         super(RatingField, self).__init__(*args, **kwargs)
-    
+
     def contribute_to_class(self, cls, name):
         self.name = name
 
