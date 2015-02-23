@@ -4,6 +4,7 @@ from django.db.models.query import QuerySet
 from django.contrib.contenttypes.models import ContentType
 import itertools
 
+
 class VoteQuerySet(QuerySet):
     def delete(self, *args, **kwargs):
         """Handles updating the related `votes` and `score` fields attached to the model."""
@@ -27,9 +28,10 @@ class VoteQuerySet(QuerySet):
             obj.save()
         
         return retval
-        
+
+
 class VoteManager(Manager):
-    def get_query_set(self):
+    def get_queryset(self):
         return VoteQuerySet(self.model)
 
     def get_for_user_in_bulk(self, objects, user):
@@ -44,6 +46,7 @@ class VoteManager(Manager):
         else:
             vote_dict = {}
         return vote_dict
+
 
 class SimilarUserManager(Manager):
     def get_recommendations(self, user, model_class, min_score=1):
