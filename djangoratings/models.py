@@ -1,11 +1,12 @@
-from django.db import models
-from django.contrib.contenttypes.models import ContentType
-from django.contrib.contenttypes import generic
-from django.contrib.auth.models import User
-
 import datetime
 
+from django.contrib.contenttypes.fields import GenericForeignKey
+from django.db import models
+from django.contrib.contenttypes.models import ContentType
+from django.contrib.auth.models import User
+
 from managers import VoteManager, SimilarUserManager
+
 
 class Vote(models.Model):
     content_type    = models.ForeignKey(ContentType, related_name="votes")
@@ -20,7 +21,7 @@ class Vote(models.Model):
 
     objects         = VoteManager()
 
-    content_object  = generic.GenericForeignKey()
+    content_object  = GenericForeignKey()
 
     class Meta:
         unique_together = (('content_type', 'object_id', 'key', 'user', 'ip_address', 'cookie'))
@@ -51,7 +52,7 @@ class Score(models.Model):
     score           = models.IntegerField()
     votes           = models.PositiveIntegerField()
     
-    content_object  = generic.GenericForeignKey()
+    content_object  = GenericForeignKey()
 
     class Meta:
         unique_together = (('content_type', 'object_id', 'key'),)
@@ -79,7 +80,7 @@ class IgnoredObject(models.Model):
     content_type    = models.ForeignKey(ContentType)
     object_id       = models.PositiveIntegerField()
     
-    content_object  = generic.GenericForeignKey()
+    content_object  = GenericForeignKey()
     
     class Meta:
         unique_together = (('content_type', 'object_id'),)
